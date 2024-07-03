@@ -1,4 +1,5 @@
-// src/bin/file_reader.rs
+#![allow(non_snake_case)]
+
 use dashmap::DashMap;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -6,49 +7,57 @@ use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
 use tokio_tungstenite::{accept_async, tungstenite::Message};
 
 #[derive(Serialize, Deserialize)]
-struct FileRequest {
-	path: String,
+struct Request {
+	Path: String,
 }
 
 #[derive(Serialize, Deserialize)]
-struct FileResponse {
-	path: String,
-	content: String,
+struct Response {
+	Path: String,
+	Content: String,
 }
 
 #[tokio::main]
 async fn main() {
-	let cache = Arc::new(DashMap::new());
-	let listener = TcpListener::bind("127.0.0.1:9999").await.unwrap();
+	let Cache = Arc::new(DashMap::new());
 
-	while let Ok((stream, _)) = listener.accept().await {
-		let cache = cache.clone();
-		tokio::spawn(handle_connection(stream, cache));
+	while let Ok((Stream, _)) =
+		TcpListener::bind("127.0.0.1:9999").await.expect("Cannot TcpListener.").accept().await
+	{
+		tokio::spawn(Handler(Stream, Cache.clone()));
 	}
 }
 
-async fn handle_connection(stream: tokio::net::TcpStream, cache: Arc<DashMap<String, String>>) {
-	let ws_stream = accept_async(stream).await.unwrap();
-	let (write, read) = ws_stream.split();
+async fn Handler(Stream: tokio::net::TcpStream, Cache: Arc<DashMap<String, String>>) {
+	let (mut Read, mut Write) =
+		accept_async(Stream).await.expect("Cannot accept_async.").get_mut().split();
 
-	read.for_each(|message| async {
-		if let Ok(msg) = message {
-			if msg.is_text() {
-				let file_request: FileRequest =
-					serde_json::from_str(msg.to_text().unwrap()).unwrap();
-				let response = if let Some(content) = cache.get(&file_request.path) {
-					FileResponse { path: file_request.path.clone(), content: content.clone() }
-				} else {
-					let mut file = File::open(&file_request.path).await.unwrap();
-					let mut content = String::new();
-					file.read_to_string(&mut content).await.unwrap();
-					cache.insert(file_request.path.clone(), content.clone());
-					FileResponse { path: file_request.path, content }
-				};
-				let response_msg = Message::text(serde_json::to_string(&response).unwrap());
-				write.send(response_msg).await.unwrap();
+	Write
+		.for_each(|message| async {
+			if let Ok(Message) = message {
+				if Message.is_text() {
+					let Request: Request =
+						serde_json::from_str(Message.to_text()).expect("Cannot serde.");
+
+					let Response = if let Some(Content) = Cache.get(&Request.Path) {
+						Response { Path: Request.Path.clone(), Content: Content.clone() }
+					} else {
+						let mut File = File::open(&Request.Path).await.expect("Cannot File.");
+
+						let mut Content = String::new();
+
+						File.read_to_string(&mut Content).await.unwrap();
+
+						Cache.insert(Request.Path.clone(), Content.clone());
+
+						Response { Path: Request.Path, Content }
+					};
+
+					Read.send(Message::text(serde_json::to_string(&Response).unwrap()))
+						.await
+						.unwrap();
+				}
 			}
-		}
-	})
-	.await;
+		})
+		.await;
 }
