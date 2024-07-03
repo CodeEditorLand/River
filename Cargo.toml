@@ -1,0 +1,23 @@
+[[bin]]
+name = "River"
+path = "Source/Library.rs"
+
+[dependencies]
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]
+name = "Library"
+path = "Source/Library.rs"
+
+[package]
+autobenches = false
+autobins = false
+autoexamples = false
+autotests = false
+default-run = "River"
+description = "🌊 River —"
+license = "MIT"
+name = "river"
+repository = "https://github.com/CodeEditorLand/River.git"
+version = "0.0.0"
+edition = "2021"
