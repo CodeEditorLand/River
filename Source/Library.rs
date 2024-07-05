@@ -1,63 +1,49 @@
-#![allow(non_snake_case)]
+use codeeditorland_echo::{Action, ActionResult, Job, WorkQueue, Worker, Yell};
 
-use dashmap::DashMap;
-use serde::{Deserialize, Serialize};
+use futures::future::join_all;
 use std::sync::Arc;
-use tokio::{fs::File, io::AsyncReadExt, net::TcpListener};
-use tokio_tungstenite::{accept_async, tungstenite::Message};
+use tokio::{net::TcpListener, sync::mpsc};
+use tokio_tungstenite::accept_async;
 
-#[derive(Serialize, Deserialize)]
-struct Request {
-	Path: String,
-}
+struct Worker;
 
-#[derive(Serialize, Deserialize)]
-struct Response {
-	Path: String,
-	Content: String,
+#[async_trait::async_trait]
+impl Worker for Worker {
+	async fn Receive(&self, Action: Action) -> ActionResult {
+		Box::pin(async move {
+			match Action {
+				Action::Read { path } => match tokio::fs::read_to_string(&path).await {
+					Ok(Content) => ActionResult { Action, result: Ok(Content) },
+					Err(Error) => {
+						ActionResult { Action, result: Err(format!("Cannot Action: {}", Error)) }
+					}
+				},
+				_ => ActionResult { Action, result: Err("Cannot Action.".to_string()) },
+			}
+		})
+	}
 }
 
 #[tokio::main]
 async fn main() {
-	let Cache = Arc::new(DashMap::new());
+	let Work = Arc::new(WorkQueue::new());
+	let (Acceptance, Receipt) = mpsc::channel(100);
 
-	while let Ok((Stream, _)) =
+	let Force: Vec<_> = (0..4)
+		.map(|_| {
+			tokio::spawn(Job(Arc::new(Worker) as Arc<dyn Worker>, Work.clone(), Acceptance.clone()))
+		})
+		.collect();
+
+	while let Ok((stream, _)) =
 		TcpListener::bind("127.0.0.1:9999").await.expect("Cannot TcpListener.").accept().await
 	{
-		tokio::spawn(Handler(Stream, Cache.clone()));
+		tokio::spawn(Yell(
+			accept_async(stream).await.expect("Cannot accept_async."),
+			Work.clone(),
+			Receipt.clone(),
+		));
 	}
-}
 
-async fn Handler(Stream: tokio::net::TcpStream, Cache: Arc<DashMap<String, String>>) {
-	let (mut Read, mut Write) =
-		accept_async(Stream).await.expect("Cannot accept_async.").get_mut().split();
-
-	Write
-		.for_each(|message| async {
-			if let Ok(Message) = message {
-				if Message.is_text() {
-					let Request: Request =
-						serde_json::from_str(Message.to_text()).expect("Cannot serde.");
-
-					let Response = if let Some(Content) = Cache.get(&Request.Path) {
-						Response { Path: Request.Path.clone(), Content: Content.clone() }
-					} else {
-						let mut File = File::open(&Request.Path).await.expect("Cannot File.");
-
-						let mut Content = String::new();
-
-						File.read_to_string(&mut Content).await.unwrap();
-
-						Cache.insert(Request.Path.clone(), Content.clone());
-
-						Response { Path: Request.Path, Content }
-					};
-
-					Read.send(Message::text(serde_json::to_string(&Response).unwrap()))
-						.await
-						.unwrap();
-				}
-			}
-		})
-		.await;
+	join_all(Force).await;
 }
