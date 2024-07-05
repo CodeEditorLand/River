@@ -1,4 +1,4 @@
-use codeeditorland_echo::{Action, ActionResult, Job, WorkQueue, Worker, Yell};
+use echo::{Action, ActionResult, Job, WorkQueue, Worker, Yell};
 
 use futures::future::join_all;
 use std::sync::Arc;
