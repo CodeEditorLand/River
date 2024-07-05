@@ -13,12 +13,13 @@ impl Worker for Worker {
 		Box::pin(async move {
 			match Action {
 				Action::Read { path } => match tokio::fs::read_to_string(&path).await {
-					Ok(Content) => ActionResult { Action, result: Ok(Content) },
-					Err(Error) => {
-						ActionResult { Action, result: Err(format!("Cannot Action: {}", Error)) }
-					}
+					Ok(Content) => ActionResult { Action, ActionResult: Ok(Content) },
+					Err(Error) => ActionResult {
+						Action,
+						ActionResult: Err(format!("Cannot Action: {}", Error)),
+					},
 				},
-				_ => ActionResult { Action, result: Err("Cannot Action.".to_string()) },
+				_ => ActionResult { Action, ActionResult: Err("Cannot Action.".to_string()) },
 			}
 		})
 	}
