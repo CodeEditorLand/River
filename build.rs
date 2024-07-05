@@ -16,11 +16,11 @@ struct Package {
 fn main() {
 	println!("cargo:rerun-if-changed=Cargo.toml");
 
-	let Cargo: Toml =
-		toml::from_str(&fs::read_to_string("Cargo.toml").expect("Cannot Cargo.toml."))
-			.expect("Cannot toml.");
-
-	let Version = Cargo.package.version;
-
-	println!("cargo:rustc-env=CARGO_PKG_VERSION={}", Version);
+	println!(
+		"cargo:rustc-env=CARGO_PKG_VERSION={}",
+		(toml::from_str::<Toml>(&fs::read_to_string("Cargo.toml").expect("Cannot Cargo.toml."))
+			.expect("Cannot toml."))
+		.package
+		.version
+	);
 }
