@@ -11,7 +11,7 @@ struct Site;
 impl Worker for Site {
 	async fn Receive(&self, Action: Action) -> ActionResult {
 		match Action {
-			Action::Read { Path } => match tokio::fs::read_to_string(&Path).await {
+			Action::Read { ref Path } => match tokio::fs::read_to_string(&Path).await {
 				Ok(Content) => ActionResult { Action, Result: Ok(Content) },
 				Err(Error) => {
 					ActionResult { Action, Result: Err(format!("Cannot Action: {}", Error)) }
@@ -24,20 +24,18 @@ impl Worker for Site {
 
 #[tokio::main]
 async fn main() {
-	let Work = Arc::new(WorkQueue::new());
-	let (Approval, Receipt) = mpsc::channel(100);
+	let Work = Arc::new(Work::Begin());
+	let (Approval, Receipt) = mpsc::unbounded_channel();
 
-			// @TODO: Auto-calc number of workers on the force
-			let Force: Vec<_> = (0..4)
-		.map(|_| tokio::spawn(Job(Arc::new(Site) as Arc<dyn Worker>, Work, Approval)))
-		.collect();
+	// @TODO: Auto-calc number of workers on the force
+	let Force: Vec<_> = (0..4).map(|_| tokio::spawn(Job(Arc::new(Site), Work, Approval))).collect();
 
 	while let Ok((stream, _)) =
 		TcpListener::bind("127.0.0.1:9998").await.expect("Cannot TcpListener.").accept().await
 	{
 		tokio::spawn(Yell(
 			accept_async(stream).await.expect("Cannot accept_async."),
-			Work,
+			Work.clone(),
 			Receipt,
 		));
 	}
