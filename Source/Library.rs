@@ -1,4 +1,4 @@
-use Echo::Fn::Job::{Action, ActionResult, Fn as Job, Work, Worker, Yell::Fn as Yell};
+use Echo::Fn::Job::{Action, ActionResult, Work, Worker};
 
 use futures::future::join_all;
 use std::sync::Arc;
@@ -28,12 +28,14 @@ async fn main() {
 	let (Approval, Receipt) = mpsc::unbounded_channel();
 
 	// @TODO: Auto-calc number of workers on the force
-	let Force: Vec<_> = (0..4).map(|_| tokio::spawn(Job(Arc::new(Site), Work, Approval))).collect();
+	let Force: Vec<_> = (0..4)
+		.map(|_| tokio::spawn(Echo::Fn::Job::Fn(Arc::new(Site), Work.clone(), Approval.clone())))
+		.collect();
 
 	while let Ok((stream, _)) =
 		TcpListener::bind("127.0.0.1:9998").await.expect("Cannot TcpListener.").accept().await
 	{
-		tokio::spawn(Yell(
+		tokio::spawn(Echo::Fn::Job::Yell::Fn(
 			accept_async(stream).await.expect("Cannot accept_async."),
 			Work.clone(),
 			Receipt,
