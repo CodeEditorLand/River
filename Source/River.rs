@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 use Echo::Fn::Job::{Action, ActionResult, Work, Worker};
 
 use std::sync::Arc;
@@ -23,7 +25,7 @@ impl Worker for Site {
 async fn main() {
 	let Work = Arc::new(Work::Begin());
 	let (Approval, Receipt) = tokio::sync::mpsc::unbounded_channel();
-	let Receipt = Arc::new(Mutex::new(Receipt));
+	let Receipt = Arc::new(tokio::sync::Mutex::new(Receipt));
 
 	// @TODO: Auto-calc number of workers on the force
 	let Force: Vec<_> = (0..4)
