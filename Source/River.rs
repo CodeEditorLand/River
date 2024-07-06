@@ -22,7 +22,8 @@ impl Worker for Site {
 #[tokio::main]
 async fn main() {
 	let Work = Arc::new(Work::Begin());
-	let (Approval, mut Receipt) = tokio::sync::mpsc::unbounded_channel();
+	let (Approval, Receipt) = tokio::sync::mpsc::unbounded_channel();
+	let Receipt = Arc::new(Mutex::new(Receipt));
 
 	// @TODO: Auto-calc number of workers on the force
 	let Force: Vec<_> = (0..4)
@@ -38,7 +39,7 @@ async fn main() {
 		tokio::spawn(Echo::Fn::Job::Yell::Fn(
 			tokio_tungstenite::accept_async(stream).await.expect("Cannot accept_async."),
 			Work.clone(),
-			&mut Receipt,
+			Arc::clone(&Receipt),
 		));
 	}
 
