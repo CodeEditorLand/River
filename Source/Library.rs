@@ -27,11 +27,9 @@ async fn main() {
 	let Work = Arc::new(WorkQueue::new());
 	let (Approval, Receipt) = mpsc::channel(100);
 
-	// @TODO: Auto-calc number of workers in the force
-	let Force: Vec<_> = (0..4)
-		.map(|_| {
-			tokio::spawn(Job(Arc::new(Site) as Arc<dyn Worker>, Work.clone(), Approval.clone()))
-		})
+			// @TODO: Auto-calc number of workers on the force
+			let Force: Vec<_> = (0..4)
+		.map(|_| tokio::spawn(Job(Arc::new(Site) as Arc<dyn Worker>, Work, Approval)))
 		.collect();
 
 	while let Ok((stream, _)) =
@@ -39,7 +37,7 @@ async fn main() {
 	{
 		tokio::spawn(Yell(
 			accept_async(stream).await.expect("Cannot accept_async."),
-			Work.clone(),
+			Work,
 			Receipt,
 		));
 	}
