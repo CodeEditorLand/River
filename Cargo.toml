@@ -3,7 +3,7 @@ name = "River"
 path = "Source/River.rs"
 
 [build-dependencies]
-serde = { version = "1.0.203", features = ["derive"] }
+serde = { version = "1.0.204", features = ["derive"] }
 serde_json = "1.0.120"
 toml = "0.8.14"
 
@@ -12,7 +12,7 @@ async-trait = "0.1.80"
 dashmap = "6.0.1"
 Echo = { version = "0.0.0", path = "../Echo" }
 futures = "0.3.30"
-serde = "1.0.203"
+serde = "1.0.204"
 serde_json = "1.0.120"
 tokio = "1.38.0"
 tokio-tungstenite = "0.23.1"
