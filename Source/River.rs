@@ -4,6 +4,7 @@ use Echo::Fn::Job::{Action, ActionResult, Work, Worker};
 
 use std::sync::Arc;
 
+/// Represents a working site.
 struct Site;
 
 /// Implements the `Worker` trait for the `Site` struct, allowing it to process actions.
@@ -64,7 +65,6 @@ impl Worker for Site {
 ///
 /// - Auto-calculate the number of workers.
 ///
-/// ```
 #[tokio::main]
 async fn main() {
 	let Work = Arc::new(Work::Begin());
