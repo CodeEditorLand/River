@@ -71,7 +71,7 @@ async fn main() {
 	let (Approval, Receipt) = tokio::sync::mpsc::unbounded_channel();
 	let Receipt = Arc::new(tokio::sync::Mutex::new(Receipt));
 
-	// @TODO: Auto-calc number of workers on the force
+	// TODO: Auto-calc number of workers on the force
 	let Force: Vec<_> = (0..4)
 		.map(|_| tokio::spawn(Echo::Fn::Job::Fn(Arc::new(Site), Work.clone(), Approval.clone())))
 		.collect();
