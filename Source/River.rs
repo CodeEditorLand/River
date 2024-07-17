@@ -76,14 +76,14 @@ async fn main() {
 		.map(|_| tokio::spawn(Echo::Fn::Job::Fn(Arc::new(Site), Work.clone(), Approval.clone())))
 		.collect();
 
-	while let Ok((stream, _)) = tokio::net::TcpListener::bind("127.0.0.1:9998")
+	while let Ok((Stream, _)) = tokio::net::TcpListener::bind("127.0.0.1:9998")
 		.await
 		.expect("Cannot TcpListener.")
 		.accept()
 		.await
 	{
 		tokio::spawn(Echo::Fn::Job::Yell::Fn(
-			tokio_tungstenite::accept_async(stream).await.expect("Cannot accept_async."),
+			tokio_tungstenite::accept_async(Stream).await.expect("Cannot accept_async."),
 			Work.clone(),
 			Arc::clone(&Receipt),
 		));
