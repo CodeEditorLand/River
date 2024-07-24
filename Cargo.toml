@@ -14,7 +14,7 @@ async-trait = "0.1.81"
 # dashmap = "6.0.1"
 futures = "0.3.30"
 serde = { version = "1.0.204", features = ["derive"] }
-tokio = { version = "1.38.1", features = ["full"] }
+tokio = { version = "1.39.1", features = ["full"] }
 tokio-tungstenite = "0.23.1"
 
 [package]
