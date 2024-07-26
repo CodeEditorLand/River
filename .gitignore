@@ -1,5 +1,0 @@
-/target/*
-!/target/release
-/target/release/*
-!/target/release/*.deb
-!/target/release/*.exe
