@@ -1,8 +1,8 @@
 # 🌊 [River] —
 
-## Installation
+## 🚀 Installation
 
-## Usage
+## 🛠️ Usage
 
 ## Dependencies
 
