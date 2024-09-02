@@ -9,7 +9,7 @@ toml = "0.8.19"
 
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
-async-trait = "0.1.81"
+async-trait = "0.1.82"
 # TODO: To implement
 # dashmap = "6.0.1"
 futures = "0.3.30"
