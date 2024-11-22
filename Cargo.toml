@@ -16,7 +16,7 @@ futures = "0.3.31"
 serde = { version = "1.0.215", features = ["derive"] }
 tokio = { version = "1.41.1", features = ["full"] }
 tokio-tungstenite = "0.24.0"
-unbug = { version = "0.2.0", features = ["enable"] }
+unbug = { version = "0.3.0", features = ["enable"] }
 
 [package]
 autobenches = false
