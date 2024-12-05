@@ -4,15 +4,15 @@ path = "Source/River.rs"
 
 [build-dependencies]
 serde = { version = "1.0.215", features = ["derive"] }
-serde_json = "1.0.133"
-toml = "0.8.19"
+serde_json = { version = "1.0.133" }
+toml = { version = "0.8.19" }
 
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
 async-trait = "0.1.83"
 # TODO: To implement
 # dashmap = "6.0.1"
-futures = "0.3.31"
+futures = { version = "0.3.31" }
 serde = { version = "1.0.215", features = ["derive"] }
 tokio = { version = "1.42.0", features = ["full"] }
 tokio-tungstenite = "0.24.0"
