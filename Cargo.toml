@@ -34,4 +34,3 @@ edition = "2021"
 
 [features]
 default = []
-Debug = ["unbug/enable"]
