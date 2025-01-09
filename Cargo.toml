@@ -4,7 +4,7 @@ path = "Source/River.rs"
 
 [build-dependencies]
 serde = { version = "1.0.217", features = ["derive"] }
-serde_json = { version = "1.0.134" }
+serde_json = { version = "1.0.135" }
 toml = { version = "0.8.19" }
 
 [dependencies]
@@ -14,7 +14,7 @@ async-trait = "0.1.85"
 # dashmap = "6.0.1"
 futures = { version = "0.3.31" }
 serde = { version = "1.0.217", features = ["derive"] }
-tokio = { version = "1.42.0", features = ["full"] }
+tokio = { version = "1.43.0", features = ["full"] }
 tokio-tungstenite = "0.26.1"
 unbug = { version = "0.4.0" }
 
