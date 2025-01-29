@@ -1,6 +1,6 @@
-# 🌊 [River] —
+# [River] 🌊
 
-## 🚀 Installation
+## Installation 🚀
 
 ## 🛠️ Usage
 
