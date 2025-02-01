@@ -4,7 +4,7 @@ path = "Source/River.rs"
 
 [build-dependencies]
 serde = { version = "1.0.217", features = ["derive"] }
-serde_json = { version = "1.0.137" }
+serde_json = { version = "1.0.138" }
 toml = { version = "0.8.19" }
 
 [dependencies]
