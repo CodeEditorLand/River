@@ -10,27 +10,25 @@ toml = { version = "0.8.19" }
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
 async-trait = "0.1.85"
-# TODO: To implement
-# dashmap = "6.0.1"
 futures = { version = "0.3.31" }
 serde = { version = "1.0.217", features = ["derive"] }
 tokio = { version = "1.43.0", features = ["full"] }
 tokio-tungstenite = "0.26.1"
 unbug = { version = "0.4.0" }
 
+[features]
+default = []
+
 [package]
 autobenches = false
 autobins = false
 autoexamples = false
 autotests = false
-publish = false
 default-run = "River"
 description = "River 🌊"
+edition = "2021"
 license-file = "LICENSE"
 name = "River"
+publish = false
 repository = "https://github.com/CodeEditorLand/River"
 version = "0.0.1"
-edition = "2021"
-
-[features]
-default = []
