@@ -5,11 +5,11 @@ path = "Source/River.rs"
 [build-dependencies]
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = { version = "1.0.138" }
-toml = { version = "0.8.19" }
+toml = { version = "0.8.20" }
 
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
-async-trait = "0.1.85"
+async-trait = "0.1.86"
 futures = { version = "0.3.31" }
 serde = { version = "1.0.217", features = ["derive"] }
 tokio = { version = "1.43.0", features = ["full"] }
@@ -26,7 +26,7 @@ autoexamples = false
 autotests = false
 default-run = "River"
 description = "River 🌊"
-edition = "2021"
+edition = "2024"
 license-file = "LICENSE"
 name = "River"
 publish = false
