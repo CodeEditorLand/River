@@ -12,7 +12,7 @@ Echo = { version = "0.0.1", path = "../Echo" }
 async-trait = "0.1.88"
 futures = { version = "0.3.31" }
 serde = { version = "1.0.219", features = ["derive"] }
-tokio = { version = "1.44.1", features = ["full"] }
+tokio = { version = "1.44.2", features = ["full"] }
 tokio-tungstenite = "0.26.2"
 unbug = { version = "0.4.0" }
 
