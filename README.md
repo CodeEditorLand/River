@@ -8,7 +8,7 @@
 
 The code imports several crates:
 
-[River]: HTTPS://github.com/CodeEditorLand/River
+[River]: https://github.com/CodeEditorLand/River
 
 ## Changelog
 
