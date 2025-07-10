@@ -5,7 +5,7 @@ path = "Source/River.rs"
 [build-dependencies]
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = { version = "1.0.140" }
-toml = { version = "0.9.0" }
+toml = { version = "0.9.1" }
 
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
