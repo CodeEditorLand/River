@@ -3,17 +3,17 @@ name = "River"
 path = "Source/River.rs"
 
 [build-dependencies]
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = { version = "1.0.140" }
-toml = { version = "0.9.1" }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.149" }
+toml = { version = "0.9.11" }
 
 [dependencies]
 Echo = { version = "0.0.1", path = "../Echo" }
-async-trait = "0.1.88"
+async-trait = "0.1.89"
 futures = { version = "0.3.31" }
-serde = { version = "1.0.219", features = ["derive"] }
-tokio = { version = "1.46.1", features = ["full"] }
-tokio-tungstenite = "0.27.0"
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.49.0", features = ["full"] }
+tokio-tungstenite = "0.28.0"
 unbug = { version = "0.4.0" }
 
 [features]
